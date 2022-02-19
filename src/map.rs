@@ -1,9 +1,9 @@
+use crate::{Ref, Storage, StorageInsert, StorageMut};
 use std::marker::PhantomData;
-use crate::{Ref, Storage, StorageMut, StorageInsert};
 
 pub struct Map<K, S> {
 	storage: S,
-	key: PhantomData<K>
+	key: PhantomData<K>,
 }
 
 impl<K, S: Storage> Map<K, S> {

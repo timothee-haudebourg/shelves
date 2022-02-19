@@ -1,5 +1,5 @@
 use crate::storage::*;
-use std::collections::{BTreeMap, btree_map::Entry};
+use std::collections::{btree_map::Entry, BTreeMap};
 
 impl<T> Storage for BTreeMap<usize, T> {
 	type Value = T;
@@ -18,7 +18,10 @@ impl<T> Storage for BTreeMap<usize, T> {
 }
 
 impl<T> StorageIter for BTreeMap<usize, T> {
-	type Iter<'a> where Self: 'a = impl Iterator<Item=(usize, &'a Self::Value)>;
+	type Iter<'a>
+	where
+		Self: 'a,
+	= impl Iterator<Item = (usize, &'a Self::Value)>;
 
 	fn iter(&self) -> Self::Iter<'_> {
 		self.iter().map(|(i, t)| (*i, t))
@@ -44,7 +47,10 @@ impl<T> StorageMut for BTreeMap<usize, T> {
 }
 
 impl<T> StorageIterMut for BTreeMap<usize, T> {
-	type IterMut<'a> where Self: 'a = impl Iterator<Item=(usize, &'a mut Self::Value)>;
+	type IterMut<'a>
+	where
+		Self: 'a,
+	= impl Iterator<Item = (usize, &'a mut Self::Value)>;
 
 	fn iter_mut(&mut self) -> Self::IterMut<'_> {
 		self.iter_mut().map(|(i, t)| (*i, t))
@@ -55,7 +61,7 @@ impl<T> StorageSet for BTreeMap<usize, T> {
 	fn set(&mut self, index: usize, value: Self::Value) -> Result<Self::Value, Self::Value> {
 		match self.entry(index) {
 			Entry::Occupied(mut entry) => Ok(entry.insert(value)),
-			Entry::Vacant(_) => Err(value)
+			Entry::Vacant(_) => Err(value),
 		}
 	}
 }

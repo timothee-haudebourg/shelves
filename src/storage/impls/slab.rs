@@ -18,7 +18,10 @@ impl<T> Storage for Slab<T> {
 }
 
 impl<T> StorageIter for Slab<T> {
-	type Iter<'a> where Self: 'a = slab::Iter<'a, T>;
+	type Iter<'a>
+	where
+		Self: 'a,
+	= slab::Iter<'a, T>;
 
 	fn iter(&self) -> Self::Iter<'_> {
 		self.iter()
@@ -44,7 +47,10 @@ impl<T> StorageMut for Slab<T> {
 }
 
 impl<T> StorageIterMut for Slab<T> {
-	type IterMut<'a> where Self: 'a = slab::IterMut<'a, T>;
+	type IterMut<'a>
+	where
+		Self: 'a,
+	= slab::IterMut<'a, T>;
 
 	fn iter_mut(&mut self) -> Self::IterMut<'_> {
 		self.iter_mut()

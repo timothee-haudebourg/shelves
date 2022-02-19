@@ -17,7 +17,10 @@ impl<T> Storage for Vec<T> {
 }
 
 impl<T> StorageIter for Vec<T> {
-	type Iter<'a> where Self: 'a = std::iter::Enumerate<std::slice::Iter<'a, T>>;
+	type Iter<'a>
+	where
+		Self: 'a,
+	= std::iter::Enumerate<std::slice::Iter<'a, T>>;
 
 	fn iter(&self) -> Self::Iter<'_> {
 		self.as_slice().iter().enumerate()
@@ -43,7 +46,10 @@ impl<T> StorageMut for Vec<T> {
 }
 
 impl<T> StorageIterMut for Vec<T> {
-	type IterMut<'a> where Self: 'a = std::iter::Enumerate<std::slice::IterMut<'a, T>>;
+	type IterMut<'a>
+	where
+		Self: 'a,
+	= std::iter::Enumerate<std::slice::IterMut<'a, T>>;
 
 	fn iter_mut(&mut self) -> Self::IterMut<'_> {
 		self.as_mut_slice().iter_mut().enumerate()

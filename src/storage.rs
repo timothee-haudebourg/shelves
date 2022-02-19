@@ -21,13 +21,15 @@ pub trait Storage {
 }
 
 pub trait StorageIter: Storage {
-	type Iter<'a>: Iterator<Item=(usize, &'a Self::Value)> where Self: 'a;
+	type Iter<'a>: Iterator<Item = (usize, &'a Self::Value)>
+	where
+		Self: 'a;
 
 	fn iter(&self) -> Self::Iter<'_>;
 }
 
 pub trait StorageIntoIter: Storage {
-	type IntoIter: Iterator<Item=(usize, Self::Value)>;
+	type IntoIter: Iterator<Item = (usize, Self::Value)>;
 
 	fn into_iter(self) -> Self::IntoIter;
 }
@@ -39,7 +41,9 @@ pub trait StorageMut: Storage {
 }
 
 pub trait StorageIterMut: Storage {
-	type IterMut<'a>: Iterator<Item=(usize, &'a mut Self::Value)> where Self: 'a;
+	type IterMut<'a>: Iterator<Item = (usize, &'a mut Self::Value)>
+	where
+		Self: 'a;
 
 	fn iter_mut(&mut self) -> Self::IterMut<'_>;
 }
@@ -51,7 +55,7 @@ pub trait StorageAllocate: Storage {
 
 pub trait StorageSet: Storage {
 	/// Sets the already allocated index to the given value.
-	/// 
+	///
 	/// Returns the previous value, or `Err(value)` if the
 	/// given index is not allocated.
 	fn set(&mut self, index: usize, value: Self::Value) -> Result<Self::Value, Self::Value>;
@@ -59,7 +63,7 @@ pub trait StorageSet: Storage {
 
 pub trait StorageInsert: Storage {
 	/// Inserts the given value at the given index.
-	/// 
+	///
 	/// Returns the previous value, or `None`
 	/// if the given was not allocated.
 	/// Contrarily to `StorageSet`, this function does allocate
