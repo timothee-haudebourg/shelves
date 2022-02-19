@@ -3,9 +3,9 @@ name = "shelves"
 version = "0.1.0"
 edition = "2021"
 authors = ["Timothée Haudebourg <author@haudebourg.net>"]
-categories = ["parsing"]
-keywords = ["turtle", "rdf", "parser"]
-description = "RDF Turtle parser"
+categories = ["data-structures"]
+keywords = ["typed", "index", "store", "reference"]
+description = "Storing values referenced by a unique typed index."
 repository = "https://github.com/timothee-haudebourg/shelves"
 documentation = "https://docs.rs/shelves"
 license = "MIT/Apache-2.0"
@@ -16,5 +16,4 @@ slab-storage = ["slab"]
 
 [dependencies]
 derivative = "2.2"
-
 slab = { version = "0.4", optional = true }

@@ -1,8 +1,12 @@
 //! This is a small utility library for storing values of and
 //! reference them using a unique typed index, `Ref<T>`,
 //! which is a simple typed wrapper around `usize`.
+//! 
 //! Any data structure can be used behind the shelf as long as it provides
-//! a way to store and fetch values by `usize`.
+//! a way to store and fetch values by `usize` through the implementation of the `Storage` trait.
+//! This library provides a `Storage` implementation for `Vec`, `BTreeMap` and `HashMap`.
+//! In addition, a `Storage` implementation is provided for the `slab::Slab` type by enabling
+//! the `slab-storage` feature.
 #![feature(generic_associated_types)]
 #![feature(type_alias_impl_trait)]
 use derivative::Derivative;
