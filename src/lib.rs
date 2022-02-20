@@ -11,10 +11,12 @@
 #![feature(type_alias_impl_trait)]
 use derivative::Derivative;
 
+pub mod hash_dictionary;
 mod map;
 mod shelf;
 pub mod storage;
 
+pub use hash_dictionary::HashDictionary;
 pub use map::Map;
 pub use shelf::Shelf;
 pub use storage::*;

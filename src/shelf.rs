@@ -1,18 +1,32 @@
 use crate::{Ref, Storage, StorageAllocate, StorageMut, StorageRemove, StorageSet};
 use std::borrow::{Borrow, BorrowMut};
 
-#[derive(Default)]
 pub struct Shelf<S> {
 	storage: S,
 }
 
-impl<S: Default> Shelf<S> {
-	pub fn new() -> Self {
-		Self::default()
+impl<S> Shelf<S> {
+	pub fn new(storage: S) -> Self {
+		Self { storage }
+	}
+}
+
+impl<S: Default> Default for Shelf<S> {
+	fn default() -> Self {
+		Self {
+			storage: S::default(),
+		}
 	}
 }
 
 impl<S: Storage> Shelf<S> {
+	pub fn borrow<T>(&self, r: Ref<T>) -> Option<&T>
+	where
+		S::Value: Borrow<T>,
+	{
+		self.storage.get(r.index()).map(|v| v.borrow())
+	}
+
 	pub fn get<T>(&self, r: Ref<T>) -> Option<&S::Value>
 	where
 		S::Value: Borrow<T>,
@@ -22,6 +36,13 @@ impl<S: Storage> Shelf<S> {
 }
 
 impl<S: StorageMut> Shelf<S> {
+	pub fn borrow_mut<T>(&mut self, r: Ref<T>) -> Option<&mut T>
+	where
+		S::Value: BorrowMut<T>,
+	{
+		self.storage.get_mut(r.index()).map(|v| v.borrow_mut())
+	}
+
 	pub fn get_mut<T>(&mut self, r: Ref<T>) -> Option<&mut S::Value>
 	where
 		S::Value: BorrowMut<T>,
