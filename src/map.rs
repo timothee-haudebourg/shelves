@@ -10,7 +10,7 @@ impl<K, S: Default> Default for Map<K, S> {
 	fn default() -> Self {
 		Self {
 			storage: S::default(),
-			key: PhantomData
+			key: PhantomData,
 		}
 	}
 }
@@ -19,7 +19,7 @@ impl<K, S> Map<K, S> {
 	pub fn new(storage: S) -> Self {
 		Self {
 			storage,
-			key: PhantomData
+			key: PhantomData,
 		}
 	}
 

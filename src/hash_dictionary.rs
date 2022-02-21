@@ -30,7 +30,7 @@ impl<S: Storage> HashDictionary<S> {
 	pub fn into_parts(self) -> (HashMap<S::Value, Ref<S::Value>>, Shelf<S>) {
 		(self.map, self.values)
 	}
-	
+
 	pub fn into_map(self) -> HashMap<S::Value, Ref<S::Value>> {
 		self.map
 	}
@@ -42,7 +42,7 @@ impl<S: Storage> HashDictionary<S> {
 	pub fn into_shelf(self) -> Shelf<S> {
 		self.values
 	}
-	
+
 	pub fn as_shelf(&self) -> &Shelf<S> {
 		&self.values
 	}
