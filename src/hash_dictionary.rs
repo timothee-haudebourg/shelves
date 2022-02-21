@@ -27,6 +27,7 @@ impl<S: Storage> HashDictionary<S> {
 		}
 	}
 
+	#[allow(clippy::type_complexity)]
 	pub fn into_parts(self) -> (HashMap<S::Value, Ref<S::Value>>, Shelf<S>) {
 		(self.map, self.values)
 	}
