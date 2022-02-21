@@ -6,6 +6,32 @@ pub struct Map<K, S> {
 	key: PhantomData<K>,
 }
 
+impl<K, S: Default> Default for Map<K, S> {
+	fn default() -> Self {
+		Self {
+			storage: S::default(),
+			key: PhantomData
+		}
+	}
+}
+
+impl<K, S> Map<K, S> {
+	pub fn new(storage: S) -> Self {
+		Self {
+			storage,
+			key: PhantomData
+		}
+	}
+
+	pub fn into_storage(self) -> S {
+		self.storage
+	}
+
+	pub fn as_storage(&self) -> &S {
+		&self.storage
+	}
+}
+
 impl<K, S: Storage> Map<K, S> {
 	pub fn get(&self, r: Ref<K>) -> Option<&S::Value> {
 		self.storage.get(r.index())

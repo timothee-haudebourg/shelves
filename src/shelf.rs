@@ -9,6 +9,14 @@ impl<S> Shelf<S> {
 	pub fn new(storage: S) -> Self {
 		Self { storage }
 	}
+
+	pub fn into_storage(self) -> S {
+		self.storage
+	}
+
+	pub fn as_storage(&self) -> &S {
+		&self.storage
+	}
 }
 
 impl<S: Default> Default for Shelf<S> {

@@ -27,6 +27,34 @@ impl<S: Storage> HashDictionary<S> {
 		}
 	}
 
+	pub fn into_parts(self) -> (HashMap<S::Value, Ref<S::Value>>, Shelf<S>) {
+		(self.map, self.values)
+	}
+	
+	pub fn into_map(self) -> HashMap<S::Value, Ref<S::Value>> {
+		self.map
+	}
+
+	pub fn as_map(&self) -> &HashMap<S::Value, Ref<S::Value>> {
+		&self.map
+	}
+
+	pub fn into_shelf(self) -> Shelf<S> {
+		self.values
+	}
+	
+	pub fn as_shelf(&self) -> &Shelf<S> {
+		&self.values
+	}
+
+	pub fn into_storage(self) -> S {
+		self.values.into_storage()
+	}
+
+	pub fn as_storage(&self) -> &S {
+		self.values.as_storage()
+	}
+
 	/// Borrows the definition (`T`) associated to the given term (`Ref<T>`).
 	pub fn borrow<T>(&self, r: Ref<T>) -> Option<&T>
 	where
