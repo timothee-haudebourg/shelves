@@ -27,6 +27,14 @@ impl<S: Storage> HashDictionary<S> {
 		}
 	}
 
+	pub fn len(&self) -> usize {
+		self.map.len()
+	}
+
+	pub fn is_empty(&self) -> bool {
+		self.map.is_empty()
+	}
+
 	#[allow(clippy::type_complexity)]
 	pub fn into_parts(self) -> (HashMap<S::Value, Ref<S::Value>>, Shelf<S>) {
 		(self.map, self.values)

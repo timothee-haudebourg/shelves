@@ -33,6 +33,14 @@ impl<K, S> Map<K, S> {
 }
 
 impl<K, S: Storage> Map<K, S> {
+	pub fn len(&self) -> usize {
+		self.storage.len()
+	}
+
+	pub fn is_empty(&self) -> bool {
+		self.storage.is_empty()
+	}
+
 	pub fn get(&self, r: Ref<K>) -> Option<&S::Value> {
 		self.storage.get(r.index())
 	}

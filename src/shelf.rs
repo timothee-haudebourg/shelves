@@ -28,6 +28,14 @@ impl<S: Default> Default for Shelf<S> {
 }
 
 impl<S: Storage> Shelf<S> {
+	pub fn len(&self) -> usize {
+		self.storage.len()
+	}
+
+	pub fn is_empty(&self) -> bool {
+		self.storage.is_empty()
+	}
+
 	pub fn borrow<T>(&self, r: Ref<T>) -> Option<&T>
 	where
 		S::Value: Borrow<T>,
