@@ -1,4 +1,7 @@
-use crate::{Ref, Storage, StorageAllocate, StorageMut, StorageRemove, StorageSet};
+use crate::{
+	Ref, Storage, StorageAllocate, StorageIter, StorageIterMut, StorageMut, StorageRemove,
+	StorageSet,
+};
 use std::borrow::{Borrow, BorrowMut};
 
 pub struct Shelf<S> {
@@ -16,6 +19,38 @@ impl<S> Shelf<S> {
 
 	pub fn as_storage(&self) -> &S {
 		&self.storage
+	}
+}
+
+impl<S: StorageIter> Shelf<S> {
+	pub fn iter(&self) -> Iter<S> {
+		Iter(self.storage.iter())
+	}
+}
+
+pub struct Iter<'a, S: 'a + StorageIter>(S::Iter<'a>);
+
+impl<'a, S: 'a + StorageIter> Iterator for Iter<'a, S> {
+	type Item = (Ref<S::Value>, &'a S::Value);
+
+	fn next(&mut self) -> Option<Self::Item> {
+		self.0.next().map(|(i, v)| (Ref::new(i), v))
+	}
+}
+
+impl<S: StorageIterMut> Shelf<S> {
+	pub fn iter_mut(&mut self) -> IterMut<S> {
+		IterMut(self.storage.iter_mut())
+	}
+}
+
+pub struct IterMut<'a, S: 'a + StorageIterMut>(S::IterMut<'a>);
+
+impl<'a, S: 'a + StorageIterMut> Iterator for IterMut<'a, S> {
+	type Item = (Ref<S::Value>, &'a mut S::Value);
+
+	fn next(&mut self) -> Option<Self::Item> {
+		self.0.next().map(|(i, v)| (Ref::new(i), v))
 	}
 }
 
