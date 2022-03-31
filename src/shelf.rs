@@ -1,6 +1,6 @@
 use crate::{
-	Ref, Storage, StorageAllocate, StorageIter, StorageIterMut, StorageMut, StorageRemove,
-	StorageSet,
+	Ref, Storage, StorageAllocate, StorageAllocateConst, StorageIter, StorageIterMut, StorageMut,
+	StorageRemove, StorageSet,
 };
 use std::borrow::{Borrow, BorrowMut};
 
@@ -105,6 +105,12 @@ impl<S: StorageMut> Shelf<S> {
 impl<S: StorageAllocate> Shelf<S> {
 	pub fn insert(&mut self, value: S::Value) -> Ref<S::Value> {
 		Ref::new(self.storage.allocate(value))
+	}
+}
+
+impl<S: StorageAllocateConst> Shelf<S> {
+	pub fn insert_const(&self, value: S::Value) -> Ref<S::Value> {
+		Ref::new(self.storage.allocate_const(value))
 	}
 }
 

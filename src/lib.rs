@@ -11,6 +11,7 @@
 #![feature(type_alias_impl_trait)]
 use derivative::Derivative;
 
+pub mod hash_const_dictionary;
 pub mod hash_dictionary;
 mod map;
 mod shelf;

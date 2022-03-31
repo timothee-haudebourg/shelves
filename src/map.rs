@@ -1,4 +1,4 @@
-use crate::{Ref, Storage, StorageInsert, StorageMut};
+use crate::{Ref, Storage, StorageInsert, StorageInsertConst, StorageMut};
 use std::marker::PhantomData;
 
 pub struct Map<K, S> {
@@ -55,5 +55,11 @@ impl<K, S: StorageMut> Map<K, S> {
 impl<K, S: StorageInsert> Map<K, S> {
 	pub fn insert(&mut self, r: Ref<K>, value: S::Value) -> Option<S::Value> {
 		self.storage.insert(r.index(), value)
+	}
+}
+
+impl<K, S: StorageInsertConst> Map<K, S> {
+	pub fn insert_const(&self, r: Ref<K>, value: S::Value) -> Option<S::Value> {
+		self.storage.insert_const(r.index(), value)
 	}
 }
