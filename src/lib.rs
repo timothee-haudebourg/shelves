@@ -17,6 +17,7 @@ mod map;
 mod shelf;
 pub mod storage;
 
+pub use hash_const_dictionary::HashConstDictionary;
 pub use hash_dictionary::HashDictionary;
 pub use map::Map;
 pub use shelf::Shelf;
