@@ -28,6 +28,15 @@ impl<S: StorageIter> Shelf<S> {
 	}
 }
 
+impl<'a, S: 'a + StorageIter> IntoIterator for &'a Shelf<S> {
+	type Item = (Ref<S::Value>, &'a S::Value);
+	type IntoIter = Iter<'a, S>;
+
+	fn into_iter(self) -> Self::IntoIter {
+		self.iter()
+	}
+}
+
 pub struct Iter<'a, S: 'a + StorageIter>(S::Iter<'a>);
 
 impl<'a, S: 'a + StorageIter> Iterator for Iter<'a, S> {
