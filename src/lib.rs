@@ -11,16 +11,17 @@
 #![feature(type_alias_impl_trait)]
 use derivative::Derivative;
 
+pub mod btree_const_dictionary;
+pub mod btree_dictionary;
 pub mod hash_const_dictionary;
 pub mod hash_dictionary;
-pub mod btree_dictionary;
 mod map;
 mod shelf;
 pub mod storage;
 
+pub use btree_dictionary::BTreeDictionary;
 pub use hash_const_dictionary::HashConstDictionary;
 pub use hash_dictionary::HashDictionary;
-pub use btree_dictionary::BTreeDictionary;
 pub use map::Map;
 pub use shelf::Shelf;
 pub use storage::*;

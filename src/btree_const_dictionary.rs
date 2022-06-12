@@ -1,49 +1,50 @@
-use crate::{Ref, Shelf, Storage, StorageAllocate, StorageMut, StorageRemove};
+use crate::{Ref, Shelf, Storage, StorageAllocateConst, StorageMut, StorageRemove};
 use std::borrow::{Borrow, BorrowMut};
+use std::cell::RefCell;
 use std::collections::BTreeMap;
 
 /// Bidirectional mapping between `T` and `Ref<T>`.
-pub struct BTreeDictionary<S: Storage> {
-	map: BTreeMap<S::Value, Ref<S::Value>>,
+pub struct BTreeConstDictionary<S: Storage> {
+	map: RefCell<BTreeMap<S::Value, Ref<S::Value>>>,
 	values: Shelf<S>,
 }
 
-impl<S: Storage + Default> Default for BTreeDictionary<S> {
+impl<S: Storage + Default> Default for BTreeConstDictionary<S> {
 	fn default() -> Self {
 		Self {
-			map: BTreeMap::new(),
+			map: RefCell::new(BTreeMap::new()),
 			values: Shelf::default(),
 		}
 	}
 }
 
-impl<S: Storage> BTreeDictionary<S> {
+impl<S: Storage> BTreeConstDictionary<S> {
 	/// Creates a new empty dictionary.
 	pub fn new(storage: S) -> Self {
 		Self {
-			map: BTreeMap::new(),
+			map: RefCell::new(BTreeMap::new()),
 			values: Shelf::new(storage),
 		}
 	}
 
 	pub fn len(&self) -> usize {
-		self.map.len()
+		self.map.borrow().len()
 	}
 
 	pub fn is_empty(&self) -> bool {
-		self.map.is_empty()
+		self.map.borrow().is_empty()
 	}
 
 	#[allow(clippy::type_complexity)]
-	pub fn into_parts(self) -> (BTreeMap<S::Value, Ref<S::Value>>, Shelf<S>) {
+	pub fn into_parts(self) -> (RefCell<BTreeMap<S::Value, Ref<S::Value>>>, Shelf<S>) {
 		(self.map, self.values)
 	}
 
 	pub fn into_map(self) -> BTreeMap<S::Value, Ref<S::Value>> {
-		self.map
+		self.map.into_inner()
 	}
 
-	pub fn as_map(&self) -> &BTreeMap<S::Value, Ref<S::Value>> {
+	pub fn as_map(&self) -> &RefCell<BTreeMap<S::Value, Ref<S::Value>>> {
 		&self.map
 	}
 
@@ -80,7 +81,7 @@ impl<S: Storage> BTreeDictionary<S> {
 	}
 }
 
-impl<S: StorageMut> BTreeDictionary<S> {
+impl<S: StorageMut> BTreeConstDictionary<S> {
 	/// Borrows a mutable reference to the definition (`T`) associated to the given term (`Ref<T>`).
 	pub fn borrow_mut<T>(&mut self, r: Ref<T>) -> Option<&mut T>
 	where
@@ -98,19 +99,20 @@ impl<S: StorageMut> BTreeDictionary<S> {
 	}
 }
 
-impl<S: StorageAllocate> BTreeDictionary<S> {
+impl<S: StorageAllocateConst> BTreeConstDictionary<S> {
 	/// Inserts a new value and returns its unique reference.
 	///
 	/// If the value is already registered, its old reference is returned
 	/// without overriding the old value.
-	pub fn insert(&mut self, value: S::Value) -> Ref<S::Value>
+	pub fn insert(&self, value: S::Value) -> Ref<S::Value>
 	where
 		S::Value: Clone + Ord,
 	{
 		use std::collections::btree_map::Entry;
-		match self.map.entry(value) {
+		let mut map = self.map.borrow_mut();
+		match map.entry(value) {
 			Entry::Vacant(entry) => {
-				let r = self.values.insert(entry.key().clone());
+				let r = self.values.insert_const(entry.key().clone());
 				entry.insert(r);
 				r
 			}
@@ -119,14 +121,15 @@ impl<S: StorageAllocate> BTreeDictionary<S> {
 	}
 }
 
-impl<S: StorageRemove> BTreeDictionary<S> {
+impl<S: StorageRemove> BTreeConstDictionary<S> {
 	pub fn remove<T>(&mut self, r: Ref<T>) -> Option<S::Value>
 	where
 		S::Value: Borrow<T> + Ord,
 	{
 		match self.values.remove(r) {
 			Some(value) => {
-				self.map.remove::<S::Value>(&value);
+				let mut map = self.map.borrow_mut();
+				map.remove::<S::Value>(&value);
 				Some(value)
 			}
 			None => None,
@@ -137,8 +140,8 @@ impl<S: StorageRemove> BTreeDictionary<S> {
 	where
 		S::Value: Ord,
 	{
-		self.map
-			.remove(value)
+		let mut map = self.map.borrow_mut();
+		map.remove(value)
 			.map(|r| (r, self.values.remove(r).unwrap()))
 	}
 }
