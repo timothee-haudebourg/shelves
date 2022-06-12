@@ -1,6 +1,6 @@
 use crate::{
-	Ref, Storage, StorageAllocate, StorageIter, StorageIterMut, StorageMut, StorageRemove,
-	StorageSet,
+	Ref, Storage, StorageAllocate, StorageAllocateConst, StorageIter, StorageIterMut, StorageMut,
+	StorageRemove, StorageSet,
 };
 use std::borrow::{Borrow, BorrowMut};
 
@@ -25,6 +25,15 @@ impl<S> Shelf<S> {
 impl<S: StorageIter> Shelf<S> {
 	pub fn iter(&self) -> Iter<S> {
 		Iter(self.storage.iter())
+	}
+}
+
+impl<'a, S: 'a + StorageIter> IntoIterator for &'a Shelf<S> {
+	type Item = (Ref<S::Value>, &'a S::Value);
+	type IntoIter = Iter<'a, S>;
+
+	fn into_iter(self) -> Self::IntoIter {
+		self.iter()
 	}
 }
 
@@ -105,6 +114,12 @@ impl<S: StorageMut> Shelf<S> {
 impl<S: StorageAllocate> Shelf<S> {
 	pub fn insert(&mut self, value: S::Value) -> Ref<S::Value> {
 		Ref::new(self.storage.allocate(value))
+	}
+}
+
+impl<S: StorageAllocateConst> Shelf<S> {
+	pub fn insert_const(&self, value: S::Value) -> Ref<S::Value> {
+		Ref::new(self.storage.allocate_const(value))
 	}
 }
 

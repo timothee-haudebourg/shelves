@@ -53,6 +53,11 @@ pub trait StorageAllocate: Storage {
 	fn allocate(&mut self, value: Self::Value) -> usize;
 }
 
+pub trait StorageAllocateConst: Storage {
+	/// Allocates an index for the given value using interior mutability only.
+	fn allocate_const(&self, value: Self::Value) -> usize;
+}
+
 pub trait StorageSet: Storage {
 	/// Sets the already allocated index to the given value.
 	///
@@ -69,6 +74,16 @@ pub trait StorageInsert: Storage {
 	/// Contrarily to `StorageSet`, this function does allocate
 	/// the given index if necessary, and stores the value there.
 	fn insert(&mut self, index: usize, value: Self::Value) -> Option<Self::Value>;
+}
+
+pub trait StorageInsertConst: Storage {
+	/// Inserts the given value at the given index using interior mutability only.
+	///
+	/// Returns the previous value, or `None`
+	/// if the given was not allocated.
+	/// Contrarily to `StorageSet`, this function does allocate
+	/// the given index if necessary, and stores the value there.
+	fn insert_const(&self, index: usize, value: Self::Value) -> Option<Self::Value>;
 }
 
 pub trait StorageRemove: Storage {

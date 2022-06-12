@@ -19,9 +19,8 @@ impl<T> Storage for HashMap<usize, T> {
 
 impl<T> StorageIter for HashMap<usize, T> {
 	type Iter<'a>
-	where
-		Self: 'a,
-	= impl Iterator<Item = (usize, &'a Self::Value)>;
+	= impl Iterator<Item = (usize, &'a Self::Value)> where
+	Self: 'a;
 
 	fn iter(&self) -> Self::Iter<'_> {
 		self.iter().map(|(i, t)| (*i, t))
@@ -48,9 +47,8 @@ impl<T> StorageMut for HashMap<usize, T> {
 
 impl<T> StorageIterMut for HashMap<usize, T> {
 	type IterMut<'a>
-	where
-		Self: 'a,
-	= impl Iterator<Item = (usize, &'a mut Self::Value)>;
+	= impl Iterator<Item = (usize, &'a mut Self::Value)> where
+	Self: 'a;
 
 	fn iter_mut(&mut self) -> Self::IterMut<'_> {
 		self.iter_mut().map(|(i, t)| (*i, t))
