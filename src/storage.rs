@@ -1,5 +1,7 @@
 mod impls;
 
+pub use impls::*;
+
 /// Basic storage trait.
 pub trait Storage {
 	/// Type of stored values.

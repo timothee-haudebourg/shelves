@@ -7,8 +7,6 @@
 //! This library provides a `Storage` implementation for `Vec`, `BTreeMap` and `HashMap`.
 //! In addition, a `Storage` implementation is provided for the `slab::Slab` type by enabling
 //! the `slab-storage` feature.
-#![feature(generic_associated_types)]
-#![feature(type_alias_impl_trait)]
 use derivative::Derivative;
 
 pub mod btree_const_dictionary;

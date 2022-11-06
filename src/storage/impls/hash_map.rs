@@ -19,11 +19,11 @@ impl<T> Storage for HashMap<usize, T> {
 
 impl<T> StorageIter for HashMap<usize, T> {
 	type Iter<'a>
-	= impl Iterator<Item = (usize, &'a Self::Value)> where
+	= MapStorageIter<std::collections::hash_map::Iter<'a, usize, T>> where
 	Self: 'a;
 
 	fn iter(&self) -> Self::Iter<'_> {
-		self.iter().map(|(i, t)| (*i, t))
+		MapStorageIter::new(self.iter())
 	}
 }
 
@@ -47,11 +47,11 @@ impl<T> StorageMut for HashMap<usize, T> {
 
 impl<T> StorageIterMut for HashMap<usize, T> {
 	type IterMut<'a>
-	= impl Iterator<Item = (usize, &'a mut Self::Value)> where
+	= MapStorageIter<std::collections::hash_map::IterMut<'a, usize, T>> where
 	Self: 'a;
 
 	fn iter_mut(&mut self) -> Self::IterMut<'_> {
-		self.iter_mut().map(|(i, t)| (*i, t))
+		MapStorageIter::new(self.iter_mut())
 	}
 }
 
