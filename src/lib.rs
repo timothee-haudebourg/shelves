@@ -14,7 +14,7 @@ pub mod btree_dictionary;
 pub mod hash_const_dictionary;
 pub mod hash_dictionary;
 mod map;
-mod shelf;
+pub mod shelf;
 pub mod storage;
 
 pub use btree_dictionary::BTreeDictionary;

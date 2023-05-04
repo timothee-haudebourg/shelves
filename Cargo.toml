@@ -1,6 +1,6 @@
 [package]
 name = "shelves"
-version = "1.0.0"
+version = "1.1.0"
 edition = "2021"
 authors = ["Timothée Haudebourg <author@haudebourg.net>"]
 categories = ["data-structures"]
