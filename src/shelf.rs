@@ -4,7 +4,9 @@ use crate::{
 };
 use std::borrow::{Borrow, BorrowMut};
 
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Shelf<S> {
+	#[cfg_attr(feature = "serde", serde(flatten))]
 	storage: S,
 }
 

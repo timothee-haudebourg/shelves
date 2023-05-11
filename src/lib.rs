@@ -36,7 +36,11 @@ pub use storage::*;
 	Ord(bound = ""),
 	Debug(bound = "")
 )]
-pub struct Ref<T>(usize, std::marker::PhantomData<T>);
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct Ref<T>(
+	usize,
+	#[cfg_attr(feature = "serde", serde(skip))] std::marker::PhantomData<T>,
+);
 
 impl<T> Ref<T> {
 	/// Creates a new reference from an index.
